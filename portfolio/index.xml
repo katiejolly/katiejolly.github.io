@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Portfolios on   katie jolly  </title>
-    <link>/portfolio/</link>
+    <link>http://katiejolly.io/portfolio/</link>
     <description>Recent content in Portfolios on   katie jolly  </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 05 Nov 2016 19:56:17 +0530</lastBuildDate>
     
-	<atom:link href="/portfolio/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://katiejolly.io/portfolio/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Ohio Precincts Project</title>
-      <link>/portfolio/ohio-project/</link>
+      <link>http://katiejolly.io/portfolio/ohio-project/</link>
       <pubDate>Sat, 05 Nov 2016 19:56:17 +0530</pubDate>
       
-      <guid>/portfolio/ohio-project/</guid>
+      <guid>http://katiejolly.io/portfolio/ohio-project/</guid>
       <description>The Ohio Project is a collaborative effort to create the first open source precinct shapefile for the state of Ohio.
 I&amp;rsquo;ve been co-maintaining it since the summer of 2018 and I&amp;rsquo;ve learned a lot about open-source and reproducible work in the process.
 If you&amp;rsquo;re interested in our work, you can check out the GitHub repository where we keep the most updated versions. If you have questions about the work, I&amp;rsquo;d be more than happy to chat with you!</description>
@@ -24,20 +24,20 @@ If you&amp;rsquo;re interested in our work, you can check out the GitHub reposit
     
     <item>
       <title>Map Digitizing Guide</title>
-      <link>/portfolio/digitizing-guide/</link>
+      <link>http://katiejolly.io/portfolio/digitizing-guide/</link>
       <pubDate>Sun, 18 Nov 2018 20:22:08 +0530</pubDate>
       
-      <guid>/portfolio/digitizing-guide/</guid>
+      <guid>http://katiejolly.io/portfolio/digitizing-guide/</guid>
       <description>A lot of my work involves digitizing maps so that they can be used in GIS software and for geographic data science projects. Recently I have been working with a local of voting precinct maps in particular.
 As part of that work, I collaborated with two other co-authors to write a quick guide that could help us when we led large workshops. I later decided to go back and redesign the guide so that it would be more visually appealing and user friendly.</description>
     </item>
     
     <item>
       <title>An Introduction to Geographic Data Science in R with Honeybees</title>
-      <link>/portfolio/honeybees/</link>
+      <link>http://katiejolly.io/portfolio/honeybees/</link>
       <pubDate>Sat, 05 Nov 2016 19:44:32 +0530</pubDate>
       
-      <guid>/portfolio/honeybees/</guid>
+      <guid>http://katiejolly.io/portfolio/honeybees/</guid>
       <description>This activity is adapted from my talk at R Ladies- Twin Cities on November 7, 2018. Enjoy!
 The activity covers spatial data formats, spatial joins, and some intro spatial autocorrelation. It uses honeybee permits data and neighborhood polygons from the City of Minneapolis to talk about geographic data science in R.
 It&amp;rsquo;s available here!
@@ -46,79 +46,69 @@ Some screenshots from the activity to give you an idea of what it looks like:</d
     
     <item>
       <title>Exploring dc&#39;s bikeshare system: data wrangling with dplyr</title>
-      <link>/portfolio/dplyr-bikes/</link>
+      <link>http://katiejolly.io/portfolio/dplyr-bikes/</link>
       <pubDate>Sat, 05 Nov 2016 19:50:47 +0530</pubDate>
       
-      <guid>/portfolio/dplyr-bikes/</guid>
+      <guid>http://katiejolly.io/portfolio/dplyr-bikes/</guid>
       <description>At my office hours for Introduction to Data Science (COMP 112) one night, some students mentioned they felt like they needed more practice with data wrangling and dplyr.
 So the next day I wrote an activity for them to work through. It ended up being really helpful for the students who worked on it with me and made them much more confident in using dplyr! I&amp;rsquo;ve also presented this activity at R Ladies- Twin Cities.</description>
     </item>
     
     <item>
       <title>Typeface Poster</title>
-      <link>/portfolio/typeface/</link>
+      <link>http://katiejolly.io/portfolio/typeface/</link>
       <pubDate>Sat, 05 Nov 2016 19:53:42 +0530</pubDate>
       
-      <guid>/portfolio/typeface/</guid>
+      <guid>http://katiejolly.io/portfolio/typeface/</guid>
       <description>To learn more about typography, I created my own typeface. I also made a poster to show it off!</description>
     </item>
     
     <item>
       <title>Business Card</title>
-      <link>/portfolio/biz-card/</link>
+      <link>http://katiejolly.io/portfolio/biz-card/</link>
       <pubDate>Sat, 05 Nov 2016 19:57:40 +0530</pubDate>
       
-      <guid>/portfolio/biz-card/</guid>
+      <guid>http://katiejolly.io/portfolio/biz-card/</guid>
       <description>For my design class we made business cards (or art cards) that we thought represented us well.
 I decided to make a map of some of Saint Paul on one side of my card and include my contact info on the other side. It went through a few iterations until I finally settled on one that I liked the most!</description>
     </item>
     
     <item>
       <title>Whip It Like a (wo)Man: A Survival Analysis of Minority Contestants on MasterChef Junior</title>
-      <link>/portfolio/whip-it/</link>
+      <link>http://katiejolly.io/portfolio/whip-it/</link>
       <pubDate>Sat, 05 Nov 2016 19:59:22 +0530</pubDate>
       
-      <guid>/portfolio/whip-it/</guid>
+      <guid>http://katiejolly.io/portfolio/whip-it/</guid>
       <description>In Fall 2018 I wrote my senior capstone for statistics with Katya Kelly about minorities in MasterChef Junior.
 We were interested in doing a survival analysis of minority contestants with and without a female judge. We generally found that female contestants do better with a female judge, but the effect is not as strong for racial minorities.
 Here&amp;rsquo;s a plot of our survival model based on the gender of the contestant:</description>
     </item>
     
     <item>
-      <title>Data Science Resources</title>
-      <link>/portfolio/data-resources/</link>
-      <pubDate>Sat, 05 Nov 2016 20:02:19 +0530</pubDate>
-      
-      <guid>/portfolio/data-resources/</guid>
-      <description>When I first started learning R and Python, I had a tough time trying to remember everything I&amp;rsquo;d learned. It was a lot of new information all at once! I found that writing it down helped so much, even if I never went back to look at what I&amp;rsquo;d written.
-I was excited about the document I&amp;rsquo;d been keeping for myself of things I&amp;rsquo;d learned related to data science, so I decided to share it on Twitter!</description>
-    </item>
-    
-    <item>
       <title>{advicegiveR}</title>
-      <link>/portfolio/advicegiver/</link>
+      <link>http://katiejolly.io/portfolio/advicegiver/</link>
       <pubDate>Sun, 18 Nov 2018 20:22:08 +0530</pubDate>
       
-      <guid>/portfolio/advicegiver/</guid>
+      <guid>http://katiejolly.io/portfolio/advicegiver/</guid>
       <description>advicegiver was my first attempt at R package writing! I was pretty proud of what I was able to produce. And it&amp;rsquo;s available on GitHub!
 The package serves as a wrapper to the adviceslip API and gives a random piece of not-at-all to extremely helpful life advice (subjectively speaking). I&amp;rsquo;ve also included functions that allow you to paste the message onto one of a few preloaded images. You could also use the same steps to load your own background image!</description>
     </item>
     
     <item>
       <title>Writing narratives with data: An introduction to ggplot2</title>
-      <link>/portfolio/data-narratives-ggplot/</link>
+      <link>http://katiejolly.io/portfolio/data-narratives-ggplot/</link>
       <pubDate>Sat, 05 Nov 2016 20:23:59 +0530</pubDate>
       
-      <guid>/portfolio/data-narratives-ggplot/</guid>
+      <guid>http://katiejolly.io/portfolio/data-narratives-ggplot/</guid>
       <description>&lt;p&gt;I wrote this tutorial and presented it at R Ladies Twin Cities It uses fivethirtyeight biopics data and begins by recreating their graphics. Feel free to use it and share it!&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Racial residential segregation in charlottesville, VA</title>
-      <link>/portfolio/charlottesville/</link>
+      <link>http://katiejolly.io/portfolio/charlottesville/</link>
       <pubDate>Sat, 05 Nov 2016 19:41:01 +0530</pubDate>
       
-      <guid>/portfolio/charlottesville/</guid>
+      <guid>http://katiejolly.io/portfolio/charlottesville/</guid>
       <description>In my Metro Analysis class, we had to pick a city to study during the semester.
 I chose Charlottesville, so I analyzed residential segregation, the housing market, and the job market in the metro area.
 For the residential segregated, we used the dissimilarity index.
@@ -128,10 +118,10 @@ The rest of the code and data for the project is available on GitHub and maybe a
     
     <item>
       <title>Design: tossed patterns</title>
-      <link>/portfolio/patterns/</link>
+      <link>http://katiejolly.io/portfolio/patterns/</link>
       <pubDate>Sun, 18 Nov 2018 18:25:22 +0530</pubDate>
       
-      <guid>/portfolio/patterns/</guid>
+      <guid>http://katiejolly.io/portfolio/patterns/</guid>
       <description>For my design class, I sketched and digitized a tossed pattern using Adobe Illustrator and Photoshop.
 I then presented the pattern on two different background colors, each highlighting different elements of the design.</description>
     </item>
