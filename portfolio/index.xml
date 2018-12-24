@@ -70,7 +70,7 @@ So the next day I wrote an activity for them to work through. It ended up being 
       
       <guid>http://katiejolly.io/portfolio/biz-card/</guid>
       <description>For my design class we made business cards (or art cards) that we thought represented us well.
-I decided to make a map of some of Saint Paul on one side of my card and include my contact info on the other side. It went through a few iterations until I finally settled on one that I liked the most!</description>
+I decided to make a map of some of Saint Paul on one side of my card and include my contact info on the other side. It went through a few iterations until I finally settled on one that I liked the most! The map was made with tigris and ggplot2 in R.</description>
     </item>
     
     <item>
