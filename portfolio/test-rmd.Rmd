@@ -1,0 +1,22 @@
+---
+title: "Bayesian Spatial Regression"
+author: "Katie Jolly"
+date: "4/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.align = "center")
+```
+
+In the past few years we have seen a resurgence of previously rare or eradicated diseases due to anti-vaccination campaigns. In order to better explain the trend, we can use Bayesian spatial regression techniques.
+
+<br>
+<br>
+
+## Data and packages
+
+```{r}
+print(1:10)
+```
+

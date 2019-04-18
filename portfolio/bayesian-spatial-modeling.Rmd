@@ -1,0 +1,191 @@
+---
+title: "Bayesian Spatial Regression"
+author: "Katie Jolly"
+date: "4/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.align = "center")
+```
+
+This project is about vaccine exemption rates in California kindergartens. 
+
+<br>
+<br>
+
+With the rise of the anti-vax movement, we are interested in what demographic factors might be connected or at higher risk. Previous research has shows that white, wealtier communities as well as certain immigrant communities are the most at-risk. We also acknowledge the spatial aspect of this data, making a spatial model more suitable.
+
+My school level immunization data comes from the California Department of Health and is aggregated over the 2012-3013, 2013-2014, and 2014-2015 school years to smooth out some of the more unstable rates. My demographic data is Census data collected at the tract level. I use this data because it is the most reliable and standard. In order to connect these two datasets, I will do a spatial join to figure out which schools are in which census tracts.
+
+<br>
+<br>
+
+## Data and packages
+
+```{r}
+library(rjags)
+library(tidyverse)
+library(sf)
+library(extrafont)
+
+load("~/portfolio/static/data/04_spatial_joins_zcta.RData")
+
+demographic_and_pbe_data_clean <- demographic_and_pbe_data_zcta %>%
+  select(-c(57:61, 63)) %>%
+  select(-58) %>%
+  st_transform(26911) %>%
+  mutate_at(vars(c(2, 4:28)), funs(as.numeric)) %>%
+  mutate(percent_white = ifelse(is.nan(percent_white), NA, percent_white),
+         weighted_mean_pbe_rate_zcta = ifelse(is.nan(weighted_mean_pbe_rate_zcta), NA, weighted_mean_pbe_rate_zcta),
+         log_weighted_mean_pbe_rate_zcta = log(weighted_mean_pbe_rate_zcta + 0.001))
+
+theme_katie <- theme(text = element_text(family = "Franklin Gothic Book", color = "#041A26"))
+```
+
+**School level data on vaccination rates**
+
+| Variable name | Description                                                                |
+|---------------|----------------------------------------------------------------------------|
+| street        | Street address of school                                                   |
+| city          | City of school                                                             |
+| zip           | 9-digit zip code of school                                                 |
+| county_1      | County of school                                                           |
+| public_priv   | Type of school (public or private)                                         |
+| school_name   | Name of school                                                             |
+| lat_dec       | Latitude                                                                   |
+| lon_dec       | Longitude                                                                  |
+| enroll_tot    | Total enrollment over 2012-2013,  2013-2014, and 2014-2015                 |
+| pbe_tot       | Total personal belief exemptions  over 2012-2013, 2013-2014, and 2014-2015 |
+| pbe_rate      | Total PBEs divided by total enrollment                                     |
+
+<br> 
+<br>
+
+**Census zcta level demographic data**
+
+| Variable name                  | Description                                                                                                |
+|--------------------------------|------------------------------------------------------------------------------------------------------------|
+| geoid                          | Unique identifier                                                                                          |
+| estimate_total_pop             | Estimated total population in 2015                                                                         |
+| name                           | Name of census zcta                                                                                       |
+| moe_total_pop                  | Margin of error on total population estimate in 2015                                                       |
+| estimate_total_bachelor_degree | Estimate of the total adult population with a bachelor's degree as the highest form of education in 2015   |
+| estimate_hs_diploma            | Estimate of the total adult population with a high school diploma as the highest form of education in 2015 |
+| estimate_total_foreign_born    | Estimate of the total population that was not born in the U.S.                                             |
+| estimate_hh_med_income         | Estimate of the household median income in 2015                                                            |
+| estimate_total_pop_hisp        | Estimate of the total Hispanic population in 2015                                                          |
+| estimate_median_age_total      | Estimate of the median age in 2015                                                                         |
+| estimate_total_white_alone     | Estimate of the population that identifies only as white in 2015                                           |
+
+<br>
+<br>
+
+## Visualizations
+
+<br>
+<br>
+
+```{r}
+ggplot() + 
+  geom_sf(data = demographic_and_pbe_data_zcta, aes(fill = weighted_mean_pbe_rate_zcta), color = "gray80") +
+  scale_fill_gradient(low = "darkorchid1", high = "darkorchid4", name = "Weighted mean PBE rate", na.value = "gray80") + theme_minimal() + theme(text = element_text(family = "Franklin Gothic Book"), panel.grid.major = element_line("transparent")) + labs(title = "PBE rates across California zip codes")
+```
+
+<br>
+<br>
+
+```{r}
+ggplot(demographic_and_pbe_data_clean, aes(x = schools)) +
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "#F1E8B8", color = "white") +
+  geom_density(color = "#D05353" ) +
+  theme_minimal() +
+  theme(text = element_text(family = "Franklin Gothic Book")) +
+  labs(title = "Most zip codes have only a few schools, and the most common number is one", x= "Number of schools", y = "Density") +
+  scale_x_continuous(breaks = c(1, 5, 10, 15))
+```
+
+<br>
+<br>
+
+```{r}
+ggplot(demographic_and_pbe_data_clean, aes(x = percent_white, y = weighted_mean_pbe_rate_zcta)) +
+  geom_point(color = "#E58F65") +
+  geom_smooth(color = "#D05353") +
+  theme_minimal() + 
+  theme(text = element_text(family = "Franklin Gothic Book")) +
+  labs(title = "In general higher white populations are more likely to have \nmore personal belief exemptions")
+```
+
+<br>
+<br>
+
+
+## Modeling
+
+<br>
+<br>
+
+I start by modeling the relationship between the percent of a zip code's population that is white according to the Census and the weighted mean personal belief exemption in a zip code. 
+
+$$\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white}$$
+
+```{r, fig.width = 12, fig.height=12}
+library(rjags)
+
+clean_data <- demographic_and_pbe_data_clean %>%
+  st_set_geometry(NULL) %>%
+  select(weighted_mean_pbe_rate_zcta, percent_white) %>%
+  tidyr::drop_na()
+
+
+# Define the model
+pbe_model <- "model{
+    #Data
+    for(i in 1:length(y)) {
+        y[i] ~ dnorm(mu[i], tau)
+        mu[i] <- beta0 + beta1*x[i]         
+    }
+
+    #Priors
+    beta0 ~ dnorm(m0, t0)
+    beta1 ~ dnorm(m1, t1)
+    tau   ~ dgamma(s, r)
+}"
+    
+    
+# Compile the model
+pbe_jags <- jags.model(textConnection(pbe_model), 
+    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, m0 = 0, t0 = 1/(10^2), m1 = 0.1, t1 = 1/(10^2), s = 10, r = 30000000),
+    inits=list(.RNG.name="base::Wichmann-Hill", .RNG.seed=454))
+
+    
+
+# Simulate the model
+pbe_sim <- coda.samples(pbe_jags,
+    variable.names=c("beta0","beta1","tau"), 
+    n.iter=10000)
+
+
+# Quick plot
+plot(pbe_sim)
+```
+
+<br>
+<br>
+
+```{r}
+pbe_chains <- data.frame(iteration = 1:10000, pbe_sim[[1]])
+
+cred_interval <- pbe_chains %>%
+  summarise(min = quantile(beta1, 0.025), max = quantile(beta1, 0.975))
+
+ggplot(pbe_chains, aes(x = beta1)) +
+  geom_histogram(fill = "#E58F65", color = "white") +
+  theme_minimal() +
+  geom_vline(xintercept = cred_interval$min[1]) +
+  geom_vline(xintercept = cred_interval$max[1]) +
+  theme_katie +
+  labs()
+```
+
