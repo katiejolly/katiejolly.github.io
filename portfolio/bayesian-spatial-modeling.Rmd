@@ -87,9 +87,17 @@ theme_katie <- theme(text = element_text(family = "Franklin Gothic Book", color 
 <br>
 
 ```{r}
+outline <- tigris::states() %>%
+  st_as_sf() %>%
+  filter(NAME == "California") %>%
+  st_transform(26911)
+
 ggplot() + 
-  geom_sf(data = demographic_and_pbe_data_zcta, aes(fill = weighted_mean_pbe_rate_zcta), color = "gray80") +
-  scale_fill_gradient(low = "darkorchid1", high = "darkorchid4", name = "Weighted mean PBE rate", na.value = "gray80") + theme_minimal() + theme(text = element_text(family = "Franklin Gothic Book"), panel.grid.major = element_line("transparent")) + labs(title = "PBE rates across California zip codes")
+  geom_sf(data = outline, fill = "#F4ECD6", color = "#EDD38B") + 
+  geom_sf(data = demographic_and_pbe_data_zcta, aes(fill = weighted_mean_pbe_rate_zcta), color = "#D1D1D1") +
+  scale_fill_gradient(low = "#BCD4DE", high = "#310A31", name = "Weighted mean PBE rate", na.value = "#F4ECD6") + theme_minimal() + theme(text = element_text(family = "Franklin Gothic Book"), panel.grid.major = element_line("transparent")) + labs(title = "PBE rates across California zip codes") +
+    theme(legend.direction = "horizontal", legend.position = "bottom",
+          axis.text = element_blank())
 ```
 
 <br>
@@ -189,3 +197,61 @@ ggplot(pbe_chains, aes(x = beta1)) +
   labs()
 ```
 
+<br>
+<br>
+
+Based on this credible interval we cannot say that there is a detectable linear relationship between percent white and pbe rate. 
+
+Next I will model the relationship between both percent white & household median income and pbe rate. 
+
+$$\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white} + \beta_2 * \text{household median income}$$
+
+<br>
+<br>
+
+```{r, fig.width = 12, fig.height=12}
+
+clean_data <- demographic_and_pbe_data_clean %>%
+  st_set_geometry(NULL) %>%
+  select(weighted_mean_pbe_rate_zcta, percent_white, estimate_hh_med_income) %>%
+  tidyr::drop_na()
+
+
+# Define the model
+pbe_model <- "model{
+    #Data
+    for(i in 1:length(y)) {
+        y[i] ~ dnorm(mu[i], tau)
+        mu[i] <- beta0 + beta1*x[i] + beta2*z[i]        
+    }
+
+    #Priors
+    beta0 ~ dnorm(m0, t0)
+    beta1 ~ dnorm(m1, t1)
+    beta2 ~ dnorm(m1, t1)
+    tau   ~ dgamma(s, r)
+}"
+    
+    
+# Compile the model
+pbe_jags <- jags.model(textConnection(pbe_model), 
+    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, z = clean_data$estimate_hh_med_income, m0 = 0, t0 = 1, m1 = 0.1, t1 = 1, s = 10, r = 30000000),
+    inits=list(.RNG.name="base::Wichmann-Hill", .RNG.seed=454))
+
+    
+
+# Simulate the model
+pbe_sim <- coda.samples(pbe_jags,
+    variable.names=c("beta0","beta1", "beta2", "tau"), 
+    n.iter=10000)
+
+
+# Quick plot
+plot(pbe_sim)
+```
+
+
+<br>
+<br>
+
+Based on the trace plots from this model, neither the percent white or household median income have a significant linear relationship with pbe rate. 
