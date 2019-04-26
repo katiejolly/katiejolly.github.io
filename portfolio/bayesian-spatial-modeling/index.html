@@ -335,8 +335,6 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=============                                                    |  20%
   |                                                                       
-  |=============                                                    |  21%
-  |                                                                       
   |==============                                                   |  21%
   |                                                                       
   |==============                                                   |  22%
@@ -447,6 +445,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=====================================                            |  57%
   |                                                                       
+  |=====================================                            |  58%
+  |                                                                       
   |======================================                           |  58%
   |                                                                       
   |======================================                           |  59%
@@ -552,6 +552,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=============================================================    |  93%
   |                                                                       
   |=============================================================    |  94%
+  |                                                                       
+  |=============================================================    |  95%
   |                                                                       
   |==============================================================   |  95%
   |                                                                       
@@ -1170,6 +1172,22 @@ df %&gt;%
   labs(title = &quot;Local spatial autocorrelation in PBE rates&quot;)</code></pre>
 <p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The areas highlighted in red are hotspots of high PBE rates.</p>
+</div>
+<div id="carbayes-model" class="section level1">
+<h1>CarBAYES model</h1>
+<pre class="r"><code># haven&#39;t run this yet but I will later. I checked that it will start running, though
+library(CARBayes)
+pbe_data &lt;- pbe_data %&gt;%
+  mutate(percent_white = replace_na(percent_white, 0))
+
+pbe_sp &lt;- as(pbe_data %&gt;% dplyr::select(c(percent_white, weighted_mean_pbe_rate_zcta_clean)), &quot;Spatial&quot;)
+pbe_nb &lt;- poly2nb(pbe_sp)
+W &lt;- nb2mat(pbe_nb, style=&quot;B&quot;, zero.policy=TRUE)
+
+perWhite &lt;- pbe_sp$percent_white
+Z.perWhite &lt;- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
+formula &lt;- weighted_mean_pbe_rate_zcta_clean ~ 1
+model.dissimilarity &lt;- S.CARdissimilarity(formula=formula, data=pbe_sp, family=&quot;gaussian&quot;, W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=10000, n.sample=30000, thin=20)</code></pre>
 </div>
 
          <div id="disqus_thread"></div>

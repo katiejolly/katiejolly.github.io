@@ -386,3 +386,22 @@ df %>%
 ```
 
 The areas highlighted in red are hotspots of high PBE rates. 
+
+# CarBAYES model
+
+```{r eval = FALSE}
+# haven't run this yet but I will later. I checked that it will start running, though
+library(CARBayes)
+pbe_data <- pbe_data %>%
+  mutate(percent_white = replace_na(percent_white, 0))
+
+pbe_sp <- as(pbe_data %>% dplyr::select(c(percent_white, weighted_mean_pbe_rate_zcta_clean)), "Spatial")
+pbe_nb <- poly2nb(pbe_sp)
+W <- nb2mat(pbe_nb, style="B", zero.policy=TRUE)
+
+perWhite <- pbe_sp$percent_white
+Z.perWhite <- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
+formula <- weighted_mean_pbe_rate_zcta_clean ~ 1
+model.dissimilarity <- S.CARdissimilarity(formula=formula, data=pbe_sp, family="gaussian", W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=10000, n.sample=30000, thin=20)
+```
+
