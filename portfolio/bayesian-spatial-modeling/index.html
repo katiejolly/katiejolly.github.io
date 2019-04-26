@@ -273,10 +273,454 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
 <h2>Visualizations</h2>
 <p><br>
 <br></p>
-<pre class="r"><code>outline &lt;- tigris::states() %&gt;%
-  st_as_sf() %&gt;%
-  filter(NAME == &quot;California&quot;) %&gt;%
-  st_transform(26911)</code></pre>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |                                                                 |   1%
+  |                                                                       
+  |=                                                                |   1%
+  |                                                                       
+  |=                                                                |   2%
+  |                                                                       
+  |==                                                               |   2%
+  |                                                                       
+  |==                                                               |   3%
+  |                                                                       
+  |==                                                               |   4%
+  |                                                                       
+  |===                                                              |   4%
+  |                                                                       
+  |===                                                              |   5%
+  |                                                                       
+  |====                                                             |   6%
+  |                                                                       
+  |====                                                             |   7%
+  |                                                                       
+  |=====                                                            |   7%
+  |                                                                       
+  |=====                                                            |   8%
+  |                                                                       
+  |======                                                           |   9%
+  |                                                                       
+  |======                                                           |  10%
+  |                                                                       
+  |=======                                                          |  10%
+  |                                                                       
+  |=======                                                          |  11%
+  |                                                                       
+  |========                                                         |  12%
+  |                                                                       
+  |========                                                         |  13%
+  |                                                                       
+  |=========                                                        |  13%
+  |                                                                       
+  |=========                                                        |  14%
+  |                                                                       
+  |=========                                                        |  15%
+  |                                                                       
+  |==========                                                       |  15%
+  |                                                                       
+  |==========                                                       |  16%
+  |                                                                       
+  |===========                                                      |  16%
+  |                                                                       
+  |===========                                                      |  17%
+  |                                                                       
+  |===========                                                      |  18%
+  |                                                                       
+  |============                                                     |  18%
+  |                                                                       
+  |============                                                     |  19%
+  |                                                                       
+  |=============                                                    |  20%
+  |                                                                       
+  |=============                                                    |  21%
+  |                                                                       
+  |==============                                                   |  21%
+  |                                                                       
+  |==============                                                   |  22%
+  |                                                                       
+  |===============                                                  |  22%
+  |                                                                       
+  |===============                                                  |  23%
+  |                                                                       
+  |===============                                                  |  24%
+  |                                                                       
+  |================                                                 |  24%
+  |                                                                       
+  |================                                                 |  25%
+  |                                                                       
+  |=================                                                |  25%
+  |                                                                       
+  |=================                                                |  26%
+  |                                                                       
+  |=================                                                |  27%
+  |                                                                       
+  |==================                                               |  27%
+  |                                                                       
+  |==================                                               |  28%
+  |                                                                       
+  |===================                                              |  29%
+  |                                                                       
+  |===================                                              |  30%
+  |                                                                       
+  |====================                                             |  30%
+  |                                                                       
+  |====================                                             |  31%
+  |                                                                       
+  |====================                                             |  32%
+  |                                                                       
+  |=====================                                            |  32%
+  |                                                                       
+  |=====================                                            |  33%
+  |                                                                       
+  |======================                                           |  33%
+  |                                                                       
+  |======================                                           |  34%
+  |                                                                       
+  |=======================                                          |  35%
+  |                                                                       
+  |=======================                                          |  36%
+  |                                                                       
+  |========================                                         |  36%
+  |                                                                       
+  |========================                                         |  37%
+  |                                                                       
+  |========================                                         |  38%
+  |                                                                       
+  |=========================                                        |  38%
+  |                                                                       
+  |=========================                                        |  39%
+  |                                                                       
+  |==========================                                       |  39%
+  |                                                                       
+  |==========================                                       |  40%
+  |                                                                       
+  |==========================                                       |  41%
+  |                                                                       
+  |===========================                                      |  41%
+  |                                                                       
+  |===========================                                      |  42%
+  |                                                                       
+  |============================                                     |  42%
+  |                                                                       
+  |============================                                     |  43%
+  |                                                                       
+  |============================                                     |  44%
+  |                                                                       
+  |=============================                                    |  44%
+  |                                                                       
+  |=============================                                    |  45%
+  |                                                                       
+  |==============================                                   |  46%
+  |                                                                       
+  |==============================                                   |  47%
+  |                                                                       
+  |===============================                                  |  47%
+  |                                                                       
+  |===============================                                  |  48%
+  |                                                                       
+  |================================                                 |  49%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================                                |  50%
+  |                                                                       
+  |=================================                                |  51%
+  |                                                                       
+  |==================================                               |  52%
+  |                                                                       
+  |==================================                               |  53%
+  |                                                                       
+  |===================================                              |  53%
+  |                                                                       
+  |===================================                              |  54%
+  |                                                                       
+  |===================================                              |  55%
+  |                                                                       
+  |====================================                             |  55%
+  |                                                                       
+  |====================================                             |  56%
+  |                                                                       
+  |=====================================                            |  56%
+  |                                                                       
+  |=====================================                            |  57%
+  |                                                                       
+  |======================================                           |  58%
+  |                                                                       
+  |======================================                           |  59%
+  |                                                                       
+  |=======================================                          |  59%
+  |                                                                       
+  |=======================================                          |  60%
+  |                                                                       
+  |========================================                         |  61%
+  |                                                                       
+  |========================================                         |  62%
+  |                                                                       
+  |=========================================                        |  62%
+  |                                                                       
+  |=========================================                        |  63%
+  |                                                                       
+  |=========================================                        |  64%
+  |                                                                       
+  |==========================================                       |  64%
+  |                                                                       
+  |==========================================                       |  65%
+  |                                                                       
+  |===========================================                      |  65%
+  |                                                                       
+  |===========================================                      |  66%
+  |                                                                       
+  |===========================================                      |  67%
+  |                                                                       
+  |============================================                     |  67%
+  |                                                                       
+  |============================================                     |  68%
+  |                                                                       
+  |=============================================                    |  69%
+  |                                                                       
+  |=============================================                    |  70%
+  |                                                                       
+  |==============================================                   |  70%
+  |                                                                       
+  |==============================================                   |  71%
+  |                                                                       
+  |===============================================                  |  72%
+  |                                                                       
+  |===============================================                  |  73%
+  |                                                                       
+  |================================================                 |  73%
+  |                                                                       
+  |================================================                 |  74%
+  |                                                                       
+  |=================================================                |  75%
+  |                                                                       
+  |=================================================                |  76%
+  |                                                                       
+  |==================================================               |  76%
+  |                                                                       
+  |==================================================               |  77%
+  |                                                                       
+  |==================================================               |  78%
+  |                                                                       
+  |===================================================              |  78%
+  |                                                                       
+  |===================================================              |  79%
+  |                                                                       
+  |====================================================             |  79%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |====================================================             |  81%
+  |                                                                       
+  |=====================================================            |  81%
+  |                                                                       
+  |=====================================================            |  82%
+  |                                                                       
+  |======================================================           |  83%
+  |                                                                       
+  |======================================================           |  84%
+  |                                                                       
+  |=======================================================          |  84%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |========================================================         |  86%
+  |                                                                       
+  |========================================================         |  87%
+  |                                                                       
+  |=========================================================        |  87%
+  |                                                                       
+  |=========================================================        |  88%
+  |                                                                       
+  |==========================================================       |  89%
+  |                                                                       
+  |==========================================================       |  90%
+  |                                                                       
+  |===========================================================      |  90%
+  |                                                                       
+  |===========================================================      |  91%
+  |                                                                       
+  |===========================================================      |  92%
+  |                                                                       
+  |============================================================     |  92%
+  |                                                                       
+  |============================================================     |  93%
+  |                                                                       
+  |=============================================================    |  93%
+  |                                                                       
+  |=============================================================    |  94%
+  |                                                                       
+  |==============================================================   |  95%
+  |                                                                       
+  |==============================================================   |  96%
+  |                                                                       
+  |===============================================================  |  96%
+  |                                                                       
+  |===============================================================  |  97%
+  |                                                                       
+  |================================================================ |  98%
+  |                                                                       
+  |================================================================ |  99%
+  |                                                                       
+  |=================================================================|  99%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_sf(data = outline, fill = &quot;#F4ECD6&quot;, color = &quot;#EDD38B&quot;) + 
+  geom_sf(data = demographic_and_pbe_data_zcta, aes(fill = weighted_mean_pbe_rate_zcta), color = &quot;#D1D1D1&quot;) +
+  scale_fill_gradient(low = &quot;#BCD4DE&quot;, high = &quot;#310A31&quot;, name = &quot;Weighted mean PBE rate&quot;, na.value = &quot;#F4ECD6&quot;) + theme_minimal() + theme(text = element_text(family = &quot;Franklin Gothic Book&quot;), panel.grid.major = element_line(&quot;transparent&quot;)) + labs(title = &quot;PBE rates across California zip codes&quot;) +
+    theme(legend.direction = &quot;horizontal&quot;, legend.position = &quot;bottom&quot;,
+          axis.text = element_blank())</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+<pre class="r"><code>ggplot(demographic_and_pbe_data_clean, aes(x = schools)) +
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = &quot;#F1E8B8&quot;, color = &quot;white&quot;) +
+  geom_density(color = &quot;#D05353&quot; ) +
+  theme_minimal() +
+  theme(text = element_text(family = &quot;Franklin Gothic Book&quot;)) +
+  labs(title = &quot;Most zip codes have only a few schools, and the most common number is one&quot;, x= &quot;Number of schools&quot;, y = &quot;Density&quot;) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15))</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+<pre class="r"><code>ggplot(demographic_and_pbe_data_clean, aes(x = percent_white, y = weighted_mean_pbe_rate_zcta)) +
+  geom_point(color = &quot;#E58F65&quot;) +
+  geom_smooth(color = &quot;#D05353&quot;) +
+  theme_minimal() + 
+  theme(text = element_text(family = &quot;Franklin Gothic Book&quot;)) +
+  labs(title = &quot;In general higher white populations are more likely to have \nmore personal belief exemptions&quot;)</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+</div>
+<div id="modeling" class="section level2">
+<h2>Modeling</h2>
+<p><br>
+<br></p>
+<p>I start by modeling the relationship between the percent of a zip code’s population that is white according to the Census and the weighted mean personal belief exemption in a zip code.</p>
+<p><span class="math display">\[\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white}\]</span></p>
+<pre class="r"><code>library(rjags)
+
+clean_data &lt;- demographic_and_pbe_data_clean %&gt;%
+  st_set_geometry(NULL) %&gt;%
+  select(weighted_mean_pbe_rate_zcta, percent_white) %&gt;%
+  tidyr::drop_na()
+
+
+# Define the model
+pbe_model &lt;- &quot;model{
+    #Data
+    for(i in 1:length(y)) {
+        y[i] ~ dnorm(mu[i], tau)
+        mu[i] &lt;- beta0 + beta1*x[i]         
+    }
+
+    #Priors
+    beta0 ~ dnorm(m0, t0)
+    beta1 ~ dnorm(m1, t1)
+    tau   ~ dgamma(s, r)
+}&quot;
+    
+    
+# Compile the model
+pbe_jags &lt;- jags.model(textConnection(pbe_model), 
+    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, m0 = 0, t0 = 1/(10^2), m1 = 0.1, t1 = 1/(10^2), s = 10, r = 30000000),
+    inits=list(.RNG.name=&quot;base::Wichmann-Hill&quot;, .RNG.seed=454))</code></pre>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 1316
+##    Unobserved stochastic nodes: 3
+##    Total graph size: 5269
+## 
+## Initializing model</code></pre>
+<pre class="r"><code># Simulate the model
+pbe_sim &lt;- coda.samples(pbe_jags,
+    variable.names=c(&quot;beta0&quot;,&quot;beta1&quot;,&quot;tau&quot;), 
+    n.iter=10000)
+
+
+# Quick plot
+plot(pbe_sim)</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+<pre class="r"><code>pbe_chains &lt;- data.frame(iteration = 1:10000, pbe_sim[[1]])
+
+cred_interval &lt;- pbe_chains %&gt;%
+  summarise(min = quantile(beta1, 0.025), max = quantile(beta1, 0.975))
+
+ggplot(pbe_chains, aes(x = beta1)) +
+  geom_histogram(fill = &quot;#E58F65&quot;, color = &quot;white&quot;) +
+  theme_minimal() +
+  geom_vline(xintercept = cred_interval$min[1]) +
+  geom_vline(xintercept = cred_interval$max[1]) +
+  theme_katie +
+  labs()</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+<p>Based on this credible interval we cannot say that there is a detectable linear relationship between percent white and pbe rate.</p>
+<p>Next I will model the relationship between both percent white &amp; household median income and pbe rate.</p>
+<p><span class="math display">\[\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white} + \beta_2 * \text{household median income}\]</span></p>
+<p><br>
+<br></p>
+<pre class="r"><code>clean_data &lt;- demographic_and_pbe_data_clean %&gt;%
+  st_set_geometry(NULL) %&gt;%
+  select(weighted_mean_pbe_rate_zcta, percent_white, estimate_hh_med_income) %&gt;%
+  tidyr::drop_na()
+
+
+# Define the model
+pbe_model &lt;- &quot;model{
+    #Data
+    for(i in 1:length(y)) {
+        y[i] ~ dnorm(mu[i], tau)
+        mu[i] &lt;- beta0 + beta1*x[i] + beta2*z[i]        
+    }
+
+    #Priors
+    beta0 ~ dnorm(m0, t0)
+    beta1 ~ dnorm(m1, t1)
+    beta2 ~ dnorm(m1, t1)
+    tau   ~ dgamma(s, r)
+}&quot;
+    
+    
+# Compile the model
+pbe_jags &lt;- jags.model(textConnection(pbe_model), 
+    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, z = clean_data$estimate_hh_med_income, m0 = 0, t0 = 1, m1 = 0.1, t1 = 1, s = 10, r = 30000000),
+    inits=list(.RNG.name=&quot;base::Wichmann-Hill&quot;, .RNG.seed=454))</code></pre>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 1312
+##    Unobserved stochastic nodes: 4
+##    Total graph size: 7865
+## 
+## Initializing model</code></pre>
+<pre class="r"><code># Simulate the model
+pbe_sim &lt;- coda.samples(pbe_jags,
+    variable.names=c(&quot;beta0&quot;,&quot;beta1&quot;, &quot;beta2&quot;, &quot;tau&quot;), 
+    n.iter=10000)
+
+
+# Quick plot
+plot(pbe_sim)</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><br>
+<br></p>
+<p>Based on the trace plots from this model, neither the percent white or household median income have a significant linear relationship with pbe rate.</p>
+</div>
+<div id="subsetting-the-data" class="section level2">
+<h2>Subsetting the data</h2>
+<p>After I made these initial models, I decided I wanted to subset the data to only a few metro areas: Los Angeles, San Diego, and San Francisco.</p>
 <pre><code>## 
   |                                                                       
   |                                                                 |   0%
@@ -307,6 +751,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=====                                                            |   8%
   |                                                                       
+  |======                                                           |   8%
+  |                                                                       
   |======                                                           |   9%
   |                                                                       
   |======                                                           |  10%
@@ -314,6 +760,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=======                                                          |  10%
   |                                                                       
   |=======                                                          |  11%
+  |                                                                       
+  |=======                                                          |  12%
   |                                                                       
   |========                                                         |  12%
   |                                                                       
@@ -368,6 +816,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |==================                                               |  27%
   |                                                                       
   |==================                                               |  28%
+  |                                                                       
+  |===================                                              |  28%
   |                                                                       
   |===================                                              |  29%
   |                                                                       
@@ -433,6 +883,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |===============================                                  |  48%
   |                                                                       
+  |================================                                 |  48%
+  |                                                                       
   |================================                                 |  49%
   |                                                                       
   |================================                                 |  50%
@@ -440,6 +892,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=================================                                |  50%
   |                                                                       
   |=================================                                |  51%
+  |                                                                       
+  |=================================                                |  52%
   |                                                                       
   |==================================                               |  52%
   |                                                                       
@@ -495,6 +949,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |============================================                     |  68%
   |                                                                       
+  |=============================================                    |  68%
+  |                                                                       
   |=============================================                    |  69%
   |                                                                       
   |=============================================                    |  70%
@@ -512,6 +968,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |================================================                 |  73%
   |                                                                       
   |================================================                 |  74%
+  |                                                                       
+  |================================================                 |  75%
   |                                                                       
   |=================================================                |  75%
   |                                                                       
@@ -547,6 +1005,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=======================================================          |  85%
   |                                                                       
+  |========================================================         |  85%
+  |                                                                       
   |========================================================         |  86%
   |                                                                       
   |========================================================         |  87%
@@ -554,6 +1014,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=========================================================        |  87%
   |                                                                       
   |=========================================================        |  88%
+  |                                                                       
+  |==========================================================       |  88%
   |                                                                       
   |==========================================================       |  89%
   |                                                                       
@@ -592,155 +1054,122 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=================================================================|  99%
   |                                                                       
   |=================================================================| 100%</code></pre>
-<pre class="r"><code>ggplot() + 
-  geom_sf(data = outline, fill = &quot;#F4ECD6&quot;, color = &quot;#EDD38B&quot;) + 
-  geom_sf(data = demographic_and_pbe_data_zcta, aes(fill = weighted_mean_pbe_rate_zcta), color = &quot;#D1D1D1&quot;) +
-  scale_fill_gradient(low = &quot;#BCD4DE&quot;, high = &quot;#310A31&quot;, name = &quot;Weighted mean PBE rate&quot;, na.value = &quot;#F4ECD6&quot;) + theme_minimal() + theme(text = element_text(family = &quot;Franklin Gothic Book&quot;), panel.grid.major = element_line(&quot;transparent&quot;)) + labs(title = &quot;PBE rates across California zip codes&quot;) +
-    theme(legend.direction = &quot;horizontal&quot;, legend.position = &quot;bottom&quot;,
-          axis.text = element_blank())</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-<pre class="r"><code>ggplot(demographic_and_pbe_data_clean, aes(x = schools)) +
-  geom_histogram(aes(y = ..density..), binwidth = 1, fill = &quot;#F1E8B8&quot;, color = &quot;white&quot;) +
-  geom_density(color = &quot;#D05353&quot; ) +
-  theme_minimal() +
-  theme(text = element_text(family = &quot;Franklin Gothic Book&quot;)) +
-  labs(title = &quot;Most zip codes have only a few schools, and the most common number is one&quot;, x= &quot;Number of schools&quot;, y = &quot;Density&quot;) +
-  scale_x_continuous(breaks = c(1, 5, 10, 15))</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-<pre class="r"><code>ggplot(demographic_and_pbe_data_clean, aes(x = percent_white, y = weighted_mean_pbe_rate_zcta)) +
-  geom_point(color = &quot;#E58F65&quot;) +
-  geom_smooth(color = &quot;#D05353&quot;) +
-  theme_minimal() + 
-  theme(text = element_text(family = &quot;Franklin Gothic Book&quot;)) +
-  labs(title = &quot;In general higher white populations are more likely to have \nmore personal belief exemptions&quot;)</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-</div>
-<div id="modeling" class="section level2">
-<h2>Modeling</h2>
-<p><br>
-<br></p>
-<p>I start by modeling the relationship between the percent of a zip code’s population that is white according to the Census and the weighted mean personal belief exemption in a zip code.</p>
-<p><span class="math display">\[\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white}\]</span></p>
-<pre class="r"><code>library(rjags)
+<p>I was then interested in whether or not there is actually clustering in the weighted mean pbe rates across these areas.</p>
+<pre class="r"><code># morans i: global clustering
+library(spdep)
+library(ape)
+st_rook = function(a, b = a) st_relate(a, b, pattern = &quot;F***1****&quot;)
 
-clean_data &lt;- demographic_and_pbe_data_clean %&gt;%
-  st_set_geometry(NULL) %&gt;%
-  select(weighted_mean_pbe_rate_zcta, percent_white) %&gt;%
-  tidyr::drop_na()
+pbe_data &lt;- demo_pbe_data_small %&gt;%
+  mutate(weighted_mean_pbe_rate_zcta_clean = replace_na(weighted_mean_pbe_rate_zcta, 0)) %&gt;%
+  mutate(NB_ROOK = st_rook(.)) 
 
+for (i in 1:nrow(pbe_data)){
+  pbe_data$nb_length[i] &lt;- length(pbe_data$NB_ROOK[[i]])
+}
 
-# Define the model
-pbe_model &lt;- &quot;model{
-    #Data
-    for(i in 1:length(y)) {
-        y[i] ~ dnorm(mu[i], tau)
-        mu[i] &lt;- beta0 + beta1*x[i]         
-    }
+pbe_data &lt;- pbe_data %&gt;%
+  select(-NB_ROOK) %&gt;%
+  filter(nb_length &gt; 0)
 
-    #Priors
-    beta0 ~ dnorm(m0, t0)
-    beta1 ~ dnorm(m1, t1)
-    tau   ~ dgamma(s, r)
-}&quot;
-    
-    
-# Compile the model
-pbe_jags &lt;- jags.model(textConnection(pbe_model), 
-    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, m0 = 0, t0 = 1/(10^2), m1 = 0.1, t1 = 1/(10^2), s = 10, r = 30000000),
-    inits=list(.RNG.name=&quot;base::Wichmann-Hill&quot;, .RNG.seed=454))</code></pre>
-<pre><code>## Compiling model graph
-##    Resolving undeclared variables
-##    Allocating nodes
-## Graph information:
-##    Observed stochastic nodes: 1316
-##    Unobserved stochastic nodes: 3
-##    Total graph size: 5269
+ggplot(pbe_data) + geom_sf(fill = &quot;#51A3A3&quot;, color = &quot;#ADD3D3&quot;) + theme_minimal() +
+  theme(panel.grid.major = element_line(&quot;transparent&quot;)) +
+  theme(text = element_text(family = &quot;Segoe UI Light&quot;),
+        axis.text = element_blank()) +
+  labs(title = &quot;Zip codes with at least one neighbor&quot;)</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pbe_sp &lt;- as(pbe_data, &quot;Spatial&quot;)
+pbe_nb &lt;- poly2nb(pbe_sp)
+pbe_w &lt;- nb2listw(pbe_nb, style = &quot;B&quot;)
+
+moran.mc(pbe_sp$weighted_mean_pbe_rate_zcta_clean, pbe_w, nsim = 9999) # mc simulations</code></pre>
+<pre><code>## 
+##  Monte-Carlo simulation of Moran I
 ## 
-## Initializing model</code></pre>
-<pre class="r"><code># Simulate the model
-pbe_sim &lt;- coda.samples(pbe_jags,
-    variable.names=c(&quot;beta0&quot;,&quot;beta1&quot;,&quot;tau&quot;), 
-    n.iter=10000)
-
-
-# Quick plot
-plot(pbe_sim)</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-<pre class="r"><code>pbe_chains &lt;- data.frame(iteration = 1:10000, pbe_sim[[1]])
-
-cred_interval &lt;- pbe_chains %&gt;%
-  summarise(min = quantile(beta1, 0.025), max = quantile(beta1, 0.975))
-
-ggplot(pbe_chains, aes(x = beta1)) +
-  geom_histogram(fill = &quot;#E58F65&quot;, color = &quot;white&quot;) +
-  theme_minimal() +
-  geom_vline(xintercept = cred_interval$min[1]) +
-  geom_vline(xintercept = cred_interval$max[1]) +
-  theme_katie +
-  labs()</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-<p>Based on this credible interval we cannot say that there is a detectable linear relationship between percent white and pbe rate.</p>
-<p>Next I will model the relationship between both percent white &amp; household median income and pbe rate.</p>
-<p><span class="math display">\[\text{weighted mean pbe rate} = \beta_0 + \beta_1 * \text{percent white} + \beta_2 * \text{household median income}\]</span></p>
-<p><br>
-<br></p>
-<pre class="r"><code>clean_data &lt;- demographic_and_pbe_data_clean %&gt;%
-  st_set_geometry(NULL) %&gt;%
-  select(weighted_mean_pbe_rate_zcta, percent_white, estimate_hh_med_income) %&gt;%
-  tidyr::drop_na()
-
-
-# Define the model
-pbe_model &lt;- &quot;model{
-    #Data
-    for(i in 1:length(y)) {
-        y[i] ~ dnorm(mu[i], tau)
-        mu[i] &lt;- beta0 + beta1*x[i] + beta2*z[i]        
-    }
-
-    #Priors
-    beta0 ~ dnorm(m0, t0)
-    beta1 ~ dnorm(m1, t1)
-    beta2 ~ dnorm(m1, t1)
-    tau   ~ dgamma(s, r)
-}&quot;
-    
-    
-# Compile the model
-pbe_jags &lt;- jags.model(textConnection(pbe_model), 
-    data = list(y = clean_data$weighted_mean_pbe_rate_zcta, x = clean_data$percent_white, z = clean_data$estimate_hh_med_income, m0 = 0, t0 = 1, m1 = 0.1, t1 = 1, s = 10, r = 30000000),
-    inits=list(.RNG.name=&quot;base::Wichmann-Hill&quot;, .RNG.seed=454))</code></pre>
-<pre><code>## Compiling model graph
-##    Resolving undeclared variables
-##    Allocating nodes
-## Graph information:
-##    Observed stochastic nodes: 1312
-##    Unobserved stochastic nodes: 4
-##    Total graph size: 7865
+## data:  pbe_sp$weighted_mean_pbe_rate_zcta_clean 
+## weights: pbe_w  
+## number of simulations + 1: 10000 
 ## 
-## Initializing model</code></pre>
-<pre class="r"><code># Simulate the model
-pbe_sim &lt;- coda.samples(pbe_jags,
-    variable.names=c(&quot;beta0&quot;,&quot;beta1&quot;, &quot;beta2&quot;, &quot;tau&quot;), 
-    n.iter=10000)
+## statistic = 0.2208, observed rank = 10000, p-value = 1e-04
+## alternative hypothesis: greater</code></pre>
+<p>I did a hypothesis test of whether of not there is positive spatial autocorrelation (clustering) in these metropolitan areas.</p>
+<p><span class="math display">\[H_0: I=0, \text{ completely spatially random}\\
+H_a: I &gt; 0, \text{ spatially clustered} \]</span></p>
+<p>To test this hypothesis I did a Monte Carlo test. This test randomly assigns values to the polygons in my data and calculates Moran’s I for each of these iterations. It then finds where our observed statistic falls in this distribution of possible statistics. My simulation included 10,000 iterations and found that the clustering in my observed data was more extreme than any of the random distributions, meaning we can reject the null hypothesis that there the data are completely spatially random. This means that spatial models are worthwhile for doing a regression analysis.</p>
+<p>Before doing that, though, I am also interested in local hotspots and outliers in the data. To calculate this I will use local Moran’s I. This statistic essentially looks for groups of observations that are far above or below the expected value.</p>
+<pre class="r"><code># create  Queens contiguity matrix
+spatmatrix &lt;- poly2nb(pbe_sp)
 
+# create a neighbours list with spatial weights
+listw &lt;- nb2listw(spatmatrix)
 
-# Quick plot
-plot(pbe_sim)</code></pre>
-<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<p><br>
-<br></p>
-<p>Based on the trace plots from this model, neither the percent white or household median income have a significant linear relationship with pbe rate.</p>
+# calculate the local moran of the distribution of white population
+lmoran &lt;- localmoran(pbe_sp$weighted_mean_pbe_rate_zcta_clean, listw)
+summary(lmoran)</code></pre>
+<pre><code>##        Ii                 E.Ii               Var.Ii       
+##  Min.   :-6.346199   Min.   :-0.001056   Min.   :0.03259  
+##  1st Qu.:-0.003083   1st Qu.:-0.001056   1st Qu.:0.12075  
+##  Median : 0.092672   Median :-0.001056   Median :0.16134  
+##  Mean   : 0.237816   Mean   :-0.001056   Mean   :0.19262  
+##  3rd Qu.: 0.257428   3rd Qu.:-0.001056   3rd Qu.:0.20598  
+##  Max.   :28.184061   Max.   :-0.001056   Max.   :0.97303  
+##       Z.Ii             Pr(z &gt; 0)     
+##  Min.   :-12.88484   Min.   :0.0000  
+##  1st Qu.: -0.00458   1st Qu.:0.2555  
+##  Median :  0.23430   Median :0.4074  
+##  Mean   :  0.59489   Mean   :0.3969  
+##  3rd Qu.:  0.65739   3rd Qu.:0.5018  
+##  Max.   : 40.42919   Max.   :1.0000</code></pre>
+<pre class="r"><code># padronize the variable and save it to a new column
+pbe_sp$s_pbe &lt;- scale(pbe_sp$weighted_mean_pbe_rate_zcta_clean)  %&gt;% as.vector()
+
+# create a spatially lagged variable and save it to a new column
+pbe_sp$lag_s_pbe &lt;- lag.listw(listw, pbe_sp$s_pbe)
+
+# summary of variables, to inform the analysis
+summary(pbe_sp$s_pbe)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -0.6694 -0.5950 -0.3154  0.0000  0.1759  9.4704</code></pre>
+<pre class="r"><code>summary(pbe_sp$lag_s_pbe)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -0.6694 -0.3910 -0.1262  0.0623  0.2439  5.6576</code></pre>
+<pre class="r"><code># create a new variable identifying the moran plot quadrant for each observation, dismissing the non-significant ones
+pbe_sp$quad_sig &lt;- NA
+
+# high-high quadrant
+pbe_sp[(pbe_sp$s_pbe &gt;= 0 &amp; 
+                 pbe_sp$lag_s_pbe &gt;= 0) &amp; 
+                (lmoran[, 5] &lt;= 0.05), &quot;quad_sig&quot;] &lt;- &quot;high-high&quot;
+# low-low quadrant
+pbe_sp[(pbe_sp$s_pbe &lt;= 0 &amp; 
+                 pbe_sp$lag_s_pbe &lt;= 0) &amp; 
+                (lmoran[, 5] &lt;= 0.05), &quot;quad_sig&quot;] &lt;- &quot;low-low&quot;
+# high-low quadrant
+pbe_sp[(pbe_sp$s_pbe &gt;= 0 &amp; 
+                 pbe_sp$lag_s_pbe &lt;= 0) &amp; 
+                (lmoran[, 5] &lt;= 0.05), &quot;quad_sig&quot;] &lt;- &quot;high-low&quot;
+# low-high quadrant
+pbe_sp@data[(pbe_sp$s_pbe &lt;= 0 
+               &amp; pbe_sp$lag_s_pbe &gt;= 0) &amp; 
+                (lmoran[, 5] &lt;= 0.05), &quot;quad_sig&quot;] &lt;- &quot;low-high&quot;
+# non-significant observations
+pbe_sp@data[(lmoran[, 5] &gt; 0.05), &quot;quad_sig&quot;] &lt;- &quot;not signif.&quot;  
+
+pbe_sp$quad_sig &lt;- as.factor(pbe_sp$quad_sig)
+pbe_sp@data$id &lt;- rownames(pbe_sp@data)
+
+# plotting the map
+df &lt;- fortify(pbe_sp, region=&quot;id&quot;)
+df &lt;- left_join(df, pbe_sp@data)
+df %&gt;% 
+  ggplot(aes(long, lat, group = group, fill = quad_sig)) + 
+  geom_polygon(color = &quot;white&quot;, size = .05)  + coord_equal() + 
+  theme_void() +
+  theme(text = element_text(family = &quot;Segoe UI Light&quot;)) + 
+  scale_fill_manual(values = c(&quot;#DD7373&quot;, &quot;#D1d1d1&quot;), name = &quot;Cluster type&quot;) +
+  labs(title = &quot;Local spatial autocorrelation in PBE rates&quot;)</code></pre>
+<p><img src="/portfolio/bayesian-spatial-modeling_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The areas highlighted in red are hotspots of high PBE rates.</p>
 </div>
 
          <div id="disqus_thread"></div>

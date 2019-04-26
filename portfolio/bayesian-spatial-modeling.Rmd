@@ -86,11 +86,14 @@ theme_katie <- theme(text = element_text(family = "Franklin Gothic Book", color 
 <br>
 <br>
 
-```{r}
+```{r echo = FALSE}
 outline <- tigris::states() %>%
   st_as_sf() %>%
   filter(NAME == "California") %>%
   st_transform(26911)
+```
+
+```{r}
 
 ggplot() + 
   geom_sf(data = outline, fill = "#F4ECD6", color = "#EDD38B") + 
@@ -254,4 +257,132 @@ plot(pbe_sim)
 <br>
 <br>
 
-Based on the trace plots from this model, neither the percent white or household median income have a significant linear relationship with pbe rate. 
+Based on the trace plots from this model, neither the percent white or household median income have a significant linear relationship with pbe rate.
+
+## Subsetting the data
+
+After I made these initial models, I decided I wanted to subset the data to only a few metro areas: Los Angeles, San Diego, and San Francisco.
+
+
+```{r echo = FALSE}
+counties <- tigris::counties(state = "CA", year = 2015)
+
+counties <- st_as_sf(counties)
+
+counties_filter <- c("Orange", "Los Angeles", "San Diego", "San Francisco", "Marin", "Alameda", "Contra Costa", "San Mateo", "Santa Clara", "Sonoma", "Solano", "Napa")
+
+counties_of_interest <- counties %>%
+  filter(NAME %in% counties_filter) %>%
+  st_transform(26911)
+
+demo_pbe_data_small <- demographic_and_pbe_data_clean %>%
+  st_join(counties_of_interest) %>%
+  filter(!is.na(COUNTYFP))
+```
+
+
+I was then interested in whether or not there is actually clustering in the weighted mean pbe rates across these areas. 
+
+
+
+```{r}
+# morans i: global clustering
+library(spdep)
+library(ape)
+st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
+
+pbe_data <- demo_pbe_data_small %>%
+  mutate(weighted_mean_pbe_rate_zcta_clean = replace_na(weighted_mean_pbe_rate_zcta, 0)) %>%
+  mutate(NB_ROOK = st_rook(.)) 
+
+for (i in 1:nrow(pbe_data)){
+  pbe_data$nb_length[i] <- length(pbe_data$NB_ROOK[[i]])
+}
+
+pbe_data <- pbe_data %>%
+  select(-NB_ROOK) %>%
+  filter(nb_length > 0)
+
+ggplot(pbe_data) + geom_sf(fill = "#51A3A3", color = "#ADD3D3") + theme_minimal() +
+  theme(panel.grid.major = element_line("transparent")) +
+  theme(text = element_text(family = "Segoe UI Light"),
+        axis.text = element_blank()) +
+  labs(title = "Zip codes with at least one neighbor")
+
+pbe_sp <- as(pbe_data, "Spatial")
+pbe_nb <- poly2nb(pbe_sp)
+pbe_w <- nb2listw(pbe_nb, style = "B")
+
+moran.mc(pbe_sp$weighted_mean_pbe_rate_zcta_clean, pbe_w, nsim = 9999) # mc simulations
+```
+
+I did a hypothesis test of whether of not there is positive spatial autocorrelation (clustering) in these metropolitan areas. 
+
+$$H_0: I=0, \text{ completely spatially random}\\
+H_a: I > 0, \text{ spatially clustered} $$
+
+To test this hypothesis I did a Monte Carlo test. This test randomly assigns values to the polygons in my data and calculates Moran's I for each of these iterations. It then finds where our observed statistic falls in this distribution of possible statistics. My simulation included 10,000 iterations and found that the clustering in my observed data was more extreme than any of the random distributions, meaning we can reject the null hypothesis that there the data are completely spatially random. This means that spatial models are worthwhile for doing a regression analysis. 
+
+Before doing that, though, I am also interested in local hotspots and outliers in the data. To calculate this I will use local Moran's I. This statistic essentially looks for groups of observations that are far above or below the expected value. 
+
+```{r}
+
+
+# create  Queens contiguity matrix
+spatmatrix <- poly2nb(pbe_sp)
+
+# create a neighbours list with spatial weights
+listw <- nb2listw(spatmatrix)
+
+# calculate the local moran of the distribution of white population
+lmoran <- localmoran(pbe_sp$weighted_mean_pbe_rate_zcta_clean, listw)
+summary(lmoran)
+
+# padronize the variable and save it to a new column
+pbe_sp$s_pbe <- scale(pbe_sp$weighted_mean_pbe_rate_zcta_clean)  %>% as.vector()
+
+# create a spatially lagged variable and save it to a new column
+pbe_sp$lag_s_pbe <- lag.listw(listw, pbe_sp$s_pbe)
+
+# summary of variables, to inform the analysis
+summary(pbe_sp$s_pbe)
+summary(pbe_sp$lag_s_pbe)
+
+# create a new variable identifying the moran plot quadrant for each observation, dismissing the non-significant ones
+pbe_sp$quad_sig <- NA
+
+# high-high quadrant
+pbe_sp[(pbe_sp$s_pbe >= 0 & 
+                 pbe_sp$lag_s_pbe >= 0) & 
+                (lmoran[, 5] <= 0.05), "quad_sig"] <- "high-high"
+# low-low quadrant
+pbe_sp[(pbe_sp$s_pbe <= 0 & 
+                 pbe_sp$lag_s_pbe <= 0) & 
+                (lmoran[, 5] <= 0.05), "quad_sig"] <- "low-low"
+# high-low quadrant
+pbe_sp[(pbe_sp$s_pbe >= 0 & 
+                 pbe_sp$lag_s_pbe <= 0) & 
+                (lmoran[, 5] <= 0.05), "quad_sig"] <- "high-low"
+# low-high quadrant
+pbe_sp@data[(pbe_sp$s_pbe <= 0 
+               & pbe_sp$lag_s_pbe >= 0) & 
+                (lmoran[, 5] <= 0.05), "quad_sig"] <- "low-high"
+# non-significant observations
+pbe_sp@data[(lmoran[, 5] > 0.05), "quad_sig"] <- "not signif."  
+
+pbe_sp$quad_sig <- as.factor(pbe_sp$quad_sig)
+pbe_sp@data$id <- rownames(pbe_sp@data)
+
+# plotting the map
+df <- fortify(pbe_sp, region="id")
+df <- left_join(df, pbe_sp@data)
+df %>% 
+  ggplot(aes(long, lat, group = group, fill = quad_sig)) + 
+  geom_polygon(color = "white", size = .05)  + coord_equal() + 
+  theme_void() +
+  theme(text = element_text(family = "Segoe UI Light")) + 
+  scale_fill_manual(values = c("#DD7373", "#D1d1d1"), name = "Cluster type") +
+  labs(title = "Local spatial autocorrelation in PBE rates")
+```
+
+The areas highlighted in red are hotspots of high PBE rates. 
