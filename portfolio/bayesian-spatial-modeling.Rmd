@@ -300,8 +300,11 @@ for (i in 1:nrow(pbe_data)){
 }
 
 pbe_data <- pbe_data %>%
-  select(-NB_ROOK) %>%
-  filter(nb_length > 0)
+  dplyr::select(-NB_ROOK) %>%
+  filter(nb_length > 0) %>%
+  mutate(log_pbe = log(weighted_mean_pbe_rate_zcta_clean + 0.001),
+         estimate_hh_med_income = replace_na(estimate_hh_med_income, 0),
+         percent_white = replace_na(percent_white, 0))
 
 ggplot(pbe_data) + geom_sf(fill = "#51A3A3", color = "#ADD3D3") + theme_minimal() +
   theme(panel.grid.major = element_line("transparent")) +
@@ -390,18 +393,158 @@ The areas highlighted in red are hotspots of high PBE rates.
 # CarBAYES model
 
 ```{r eval = FALSE}
-# haven't run this yet but I will later. I checked that it will start running, though
 library(CARBayes)
 pbe_data <- pbe_data %>%
   mutate(percent_white = replace_na(percent_white, 0))
 
-pbe_sp <- as(pbe_data %>% dplyr::select(c(percent_white, weighted_mean_pbe_rate_zcta_clean)), "Spatial")
-pbe_nb <- poly2nb(pbe_sp)
+pbe_sp <- as(pbe_data, "Spatial")
+pbe_nb <- poly2nb(pbe_sp, row.names=rownames(pbe_sp))
 W <- nb2mat(pbe_nb, style="B", zero.policy=TRUE)
 
 perWhite <- pbe_sp$percent_white
 Z.perWhite <- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
 formula <- weighted_mean_pbe_rate_zcta_clean ~ 1
-model.dissimilarity <- S.CARdissimilarity(formula=formula, data=pbe_sp, family="gaussian", W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=10000, n.sample=30000, thin=20)
+model.dissimilarity <- S.CARdissimilarity(formula=formula, data=pbe_sp, family="gaussian", W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=1000, n.sample=10000, thin=20)
+```
+
+```{r eval = FALSE}
+print(model.dissimilarity)
+```
+
+```{r eval = FALSE}
+pbe_sp <- as(pbe_data, "Spatial")
+
+pbe_nb <- poly2nb(pbe_sp, row.names=rownames(pbe_sp))
+W <- nb2mat(pbe_nb, style="B", zero.policy=TRUE)
+
+perWhite <- pbe_sp$percent_white
+medianIncome <- pbe_sp$estimate_hh_med_income
+Z.perWhite <- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
+Z.medianIncome <- as.matrix(dist(medianIncome, diag=TRUE, upper=TRUE))
+
+formula <- log_pbe ~ 1
+model.dissimilarity2 <- S.CARdissimilarity(formula=formula, data=pbe_sp, family="gaussian", W=W, Z=list(Z.perWhite=Z.perWhite, Z.medianIncome = Z.medianIncome), W.binary=TRUE, burnin=1000, n.sample=10000, thin=20)
+
+print(model.dissimilarity2)
+```
+
+
+```{r eval = FALSE}
+formula <- log_pbe ~ percent_white + estimate_hh_med_income
+
+model.spatial <- S.CARleroux(formula= log_pbe ~ percent_white + estimate_median_age_total, data=pbe_sp@data, family="gaussian", W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial)
+
+model.spatial2 <- S.CARleroux(formula= log_pbe ~ percent_white * estimate_hh_med_income + estimate_median_age_total, data=pbe_sp@data, family="gaussian", W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial2)
+
+pbe_sp$hh_med_income_thousands <- round(pbe_sp$estimate_hh_med_income / 1000, 0)
+
+pbe_sp$percent_white_100 <- pbe_sp$percent_white * 100
+
+model.spatial3 <- S.CARleroux(formula= log_pbe ~ percent_white_100 + hh_med_income_thousands, data=pbe_sp@data, family="gaussian", W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial3)
+
+model.spatial4 <- S.CARleroux(formula= log_pbe ~ percent_white_100 * hh_med_income_thousands, data=pbe_sp@data, family="gaussian", W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial4)
+
+model.spatial4$X
+
+```
+
+
+
+
+```{r}
+# border.locations <- model.dissimilarity$localised.structure$W.posterior
+# 
+# boundary.final <- highlight.borders(border.locations=border.locations, spdata=pbe_sp)
+# 
+# pbe_sp <- spTransform(pbe_sp, )
+# 
+# library(leaflet)
+# colours <- colorNumeric(palette = c("#F1BB7B", "#FD6467"), domain = pbe_sp$weighted_mean_pbe_rate_zcta_clean)
+# map3 <- leaflet(data=pbe_sp) %>%
+# addTiles() %>%
+# addPolygons(fillColor = ~colours(weighted_mean_pbe_rate_zcta_clean), color="red", weight=1,
+# fillOpacity = .9) %>%
+# addLegend(pal = colours, values = tn.spatial$WomenPerClinic, opacity = 1,
+# title="Women Per Clinic") %>%
+# addCircles(lng = ~boundary.final$X, lat = ~boundary.final$Y, weight = 1,
+# radius = 2) %>%
+# addScaleBar(position="bottomleft")
+# map3
+```
+
+
+function (border.locations, spdata) 
+{
+    n <- nrow(border.locations)
+    border.locations[is.na(border.locations)] <- 2
+    boundary.all <- array(c(NA, NA), c(1, 2))
+    colnames(boundary.all) <- c("X", "Y")
+    polygons <- spdata@polygons
+    for (i in 1:n) {
+        for (j in 1:n) {
+            if (border.locations[i, j] == 0 & i > j) {
+                points1 <- polygons[[i]]@Polygons[[1]]@coords
+                points2 <- polygons[[j]]@Polygons[[1]]@coords
+                which.points <- which(!is.na(match(points1[, 
+                  1], points2[, 1])) & !is.na(match(points1[, 
+                  2], points2[, 2])))
+                common.points <- points1[which.points, ]
+                boundary.all <- rbind(boundary.all, common.points)
+            }
+            else {
+            }
+        }
+    }
+    boundary.all <- boundary.all[-1, ]
+    boundary.all2 <- boundary.all[!duplicated(boundary.all), 
+        ]
+    rownames(boundary.all2) <- 1:nrow(boundary.all2)
+    boundary.final <- SpatialPoints(boundary.all2)
+    return(boundary.final)
+}
+
+```{r eval = FALSE}
+boundary.highlight <- function (border.locations, spdata) 
+{
+    n <- nrow(border.locations)
+    border.locations[is.na(border.locations)] <- 2
+    return(border.locations)
+    # boundary.all <- array(c(NA, NA), c(1, 2))
+    # colnames(boundary.all) <- c("X", "Y")
+    # polygons <- spdata@polygons
+    # for (i in 1:n) {
+    #     for (j in 1:n) {
+    #         if (border.locations[i, j] == 0 & i > j) {
+    #             points1 <- polygons[[i]]@Polygons[[1]]@coords
+    #             points2 <- polygons[[j]]@Polygons[[1]]@coords
+    #             which.points <- which(!is.na(match(points1[, 
+    #               1], points2[, 1])) & !is.na(match(points1[, 
+    #               2], points2[, 2])))
+    #             common.points <- points1[which.points, ]
+    #             boundary.all <- rbind(boundary.all, common.points)
+    #         }
+    #         else {
+    #         }
+    #     }
+    # }
+    # boundary.all <- boundary.all[-1, ]
+    # boundary.all2 <- boundary.all[!duplicated(boundary.all), 
+    #     ]
+    # rownames(boundary.all2) <- 1:nrow(boundary.all2)
+    # boundary.final <- SpatialPoints(boundary.all2)
+    # return(boundary.final)
+}
+```
+
+```{r eval = FALSE}
+test <- boundary.highlight(border.locations=border.locations, spdata=pbe_sp)
 ```
 

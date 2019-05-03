@@ -293,6 +293,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |===                                                              |   5%
   |                                                                       
+  |====                                                             |   5%
+  |                                                                       
   |====                                                             |   6%
   |                                                                       
   |====                                                             |   7%
@@ -300,6 +302,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=====                                                            |   7%
   |                                                                       
   |=====                                                            |   8%
+  |                                                                       
+  |======                                                           |   8%
   |                                                                       
   |======                                                           |   9%
   |                                                                       
@@ -335,6 +339,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=============                                                    |  20%
   |                                                                       
+  |=============                                                    |  21%
+  |                                                                       
   |==============                                                   |  21%
   |                                                                       
   |==============                                                   |  22%
@@ -348,8 +354,6 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |================                                                 |  24%
   |                                                                       
   |================                                                 |  25%
-  |                                                                       
-  |=================                                                |  25%
   |                                                                       
   |=================                                                |  26%
   |                                                                       
@@ -366,8 +370,6 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |====================                                             |  30%
   |                                                                       
   |====================                                             |  31%
-  |                                                                       
-  |====================                                             |  32%
   |                                                                       
   |=====================                                            |  32%
   |                                                                       
@@ -400,8 +402,6 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |===========================                                      |  41%
   |                                                                       
   |===========================                                      |  42%
-  |                                                                       
-  |============================                                     |  42%
   |                                                                       
   |============================                                     |  43%
   |                                                                       
@@ -455,6 +455,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=======================================                          |  60%
   |                                                                       
+  |=======================================                          |  61%
+  |                                                                       
   |========================================                         |  61%
   |                                                                       
   |========================================                         |  62%
@@ -486,6 +488,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |==============================================                   |  70%
   |                                                                       
   |==============================================                   |  71%
+  |                                                                       
+  |==============================================                   |  72%
   |                                                                       
   |===============================================                  |  72%
   |                                                                       
@@ -519,6 +523,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |                                                                       
   |=====================================================            |  82%
   |                                                                       
+  |======================================================           |  82%
+  |                                                                       
   |======================================================           |  83%
   |                                                                       
   |======================================================           |  84%
@@ -526,6 +532,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |=======================================================          |  84%
   |                                                                       
   |=======================================================          |  85%
+  |                                                                       
+  |========================================================         |  85%
   |                                                                       
   |========================================================         |  86%
   |                                                                       
@@ -542,8 +550,6 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |===========================================================      |  90%
   |                                                                       
   |===========================================================      |  91%
-  |                                                                       
-  |===========================================================      |  92%
   |                                                                       
   |============================================================     |  92%
   |                                                                       
@@ -562,6 +568,8 @@ theme_katie &lt;- theme(text = element_text(family = &quot;Franklin Gothic Book&
   |===============================================================  |  96%
   |                                                                       
   |===============================================================  |  97%
+  |                                                                       
+  |===============================================================  |  98%
   |                                                                       
   |================================================================ |  98%
   |                                                                       
@@ -1071,8 +1079,11 @@ for (i in 1:nrow(pbe_data)){
 }
 
 pbe_data &lt;- pbe_data %&gt;%
-  select(-NB_ROOK) %&gt;%
-  filter(nb_length &gt; 0)
+  dplyr::select(-NB_ROOK) %&gt;%
+  filter(nb_length &gt; 0) %&gt;%
+  mutate(log_pbe = log(weighted_mean_pbe_rate_zcta_clean + 0.001),
+         estimate_hh_med_income = replace_na(estimate_hh_med_income, 0),
+         percent_white = replace_na(percent_white, 0))
 
 ggplot(pbe_data) + geom_sf(fill = &quot;#51A3A3&quot;, color = &quot;#ADD3D3&quot;) + theme_minimal() +
   theme(panel.grid.major = element_line(&quot;transparent&quot;)) +
@@ -1175,19 +1186,134 @@ df %&gt;%
 </div>
 <div id="carbayes-model" class="section level1">
 <h1>CarBAYES model</h1>
-<pre class="r"><code># haven&#39;t run this yet but I will later. I checked that it will start running, though
-library(CARBayes)
+<pre class="r"><code>library(CARBayes)
 pbe_data &lt;- pbe_data %&gt;%
   mutate(percent_white = replace_na(percent_white, 0))
 
-pbe_sp &lt;- as(pbe_data %&gt;% dplyr::select(c(percent_white, weighted_mean_pbe_rate_zcta_clean)), &quot;Spatial&quot;)
-pbe_nb &lt;- poly2nb(pbe_sp)
+pbe_sp &lt;- as(pbe_data, &quot;Spatial&quot;)
+pbe_nb &lt;- poly2nb(pbe_sp, row.names=rownames(pbe_sp))
 W &lt;- nb2mat(pbe_nb, style=&quot;B&quot;, zero.policy=TRUE)
 
 perWhite &lt;- pbe_sp$percent_white
 Z.perWhite &lt;- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
 formula &lt;- weighted_mean_pbe_rate_zcta_clean ~ 1
-model.dissimilarity &lt;- S.CARdissimilarity(formula=formula, data=pbe_sp, family=&quot;gaussian&quot;, W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=10000, n.sample=30000, thin=20)</code></pre>
+model.dissimilarity &lt;- S.CARdissimilarity(formula=formula, data=pbe_sp, family=&quot;gaussian&quot;, W=W, Z=list(Z.perWhite=Z.perWhite), W.binary=TRUE, burnin=1000, n.sample=10000, thin=20)</code></pre>
+<pre class="r"><code>print(model.dissimilarity)</code></pre>
+<pre class="r"><code>pbe_sp &lt;- as(pbe_data, &quot;Spatial&quot;)
+
+pbe_nb &lt;- poly2nb(pbe_sp, row.names=rownames(pbe_sp))
+W &lt;- nb2mat(pbe_nb, style=&quot;B&quot;, zero.policy=TRUE)
+
+perWhite &lt;- pbe_sp$percent_white
+medianIncome &lt;- pbe_sp$estimate_hh_med_income
+Z.perWhite &lt;- as.matrix(dist(perWhite, diag=TRUE, upper=TRUE))
+Z.medianIncome &lt;- as.matrix(dist(medianIncome, diag=TRUE, upper=TRUE))
+
+formula &lt;- log_pbe ~ 1
+model.dissimilarity2 &lt;- S.CARdissimilarity(formula=formula, data=pbe_sp, family=&quot;gaussian&quot;, W=W, Z=list(Z.perWhite=Z.perWhite, Z.medianIncome = Z.medianIncome), W.binary=TRUE, burnin=1000, n.sample=10000, thin=20)
+
+print(model.dissimilarity2)</code></pre>
+<pre class="r"><code>formula &lt;- log_pbe ~ percent_white + estimate_hh_med_income
+
+model.spatial &lt;- S.CARleroux(formula= log_pbe ~ percent_white + estimate_median_age_total, data=pbe_sp@data, family=&quot;gaussian&quot;, W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial)
+
+model.spatial2 &lt;- S.CARleroux(formula= log_pbe ~ percent_white * estimate_hh_med_income + estimate_median_age_total, data=pbe_sp@data, family=&quot;gaussian&quot;, W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial2)
+
+pbe_sp$hh_med_income_thousands &lt;- round(pbe_sp$estimate_hh_med_income / 1000, 0)
+
+pbe_sp$percent_white_100 &lt;- pbe_sp$percent_white * 100
+
+model.spatial3 &lt;- S.CARleroux(formula= log_pbe ~ percent_white_100 + hh_med_income_thousands, data=pbe_sp@data, family=&quot;gaussian&quot;, W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial3)
+
+model.spatial4 &lt;- S.CARleroux(formula= log_pbe ~ percent_white_100 * hh_med_income_thousands, data=pbe_sp@data, family=&quot;gaussian&quot;, W=W, burnin=100000, n.sample=300000, thin=20)
+
+print(model.spatial4)
+
+model.spatial4$X</code></pre>
+<pre class="r"><code># border.locations &lt;- model.dissimilarity$localised.structure$W.posterior
+# 
+# boundary.final &lt;- highlight.borders(border.locations=border.locations, spdata=pbe_sp)
+# 
+# pbe_sp &lt;- spTransform(pbe_sp, )
+# 
+# library(leaflet)
+# colours &lt;- colorNumeric(palette = c(&quot;#F1BB7B&quot;, &quot;#FD6467&quot;), domain = pbe_sp$weighted_mean_pbe_rate_zcta_clean)
+# map3 &lt;- leaflet(data=pbe_sp) %&gt;%
+# addTiles() %&gt;%
+# addPolygons(fillColor = ~colours(weighted_mean_pbe_rate_zcta_clean), color=&quot;red&quot;, weight=1,
+# fillOpacity = .9) %&gt;%
+# addLegend(pal = colours, values = tn.spatial$WomenPerClinic, opacity = 1,
+# title=&quot;Women Per Clinic&quot;) %&gt;%
+# addCircles(lng = ~boundary.final$X, lat = ~boundary.final$Y, weight = 1,
+# radius = 2) %&gt;%
+# addScaleBar(position=&quot;bottomleft&quot;)
+# map3</code></pre>
+<p>function (border.locations, spdata)
+{
+n &lt;- nrow(border.locations)
+border.locations[is.na(border.locations)] &lt;- 2
+boundary.all &lt;- array(c(NA, NA), c(1, 2))
+colnames(boundary.all) &lt;- c(“X”, “Y”)
+polygons &lt;- <a href="mailto:spdata@polygons" class="email">spdata@polygons</a>
+for (i in 1:n) {
+for (j in 1:n) {
+if (border.locations[i, j] == 0 &amp; i &gt; j) {
+points1 &lt;- polygons[[i]]<span class="citation">@Polygons [[1]]</span><span class="citation">@coords</span>
+points2 &lt;- polygons[[j]]<span class="citation">@Polygons [[1]]</span><span class="citation">@coords</span>
+which.points &lt;- which(!is.na(match(points1[,
+1], points2[, 1])) &amp; !is.na(match(points1[,
+2], points2[, 2])))
+common.points &lt;- points1[which.points, ]
+boundary.all &lt;- rbind(boundary.all, common.points)
+}
+else {
+}
+}
+}
+boundary.all &lt;- boundary.all[-1, ]
+boundary.all2 &lt;- boundary.all[!duplicated(boundary.all),
+]
+rownames(boundary.all2) &lt;- 1:nrow(boundary.all2)
+boundary.final &lt;- SpatialPoints(boundary.all2)
+return(boundary.final)
+}</p>
+<pre class="r"><code>boundary.highlight &lt;- function (border.locations, spdata) 
+{
+    n &lt;- nrow(border.locations)
+    border.locations[is.na(border.locations)] &lt;- 2
+    return(border.locations)
+    # boundary.all &lt;- array(c(NA, NA), c(1, 2))
+    # colnames(boundary.all) &lt;- c(&quot;X&quot;, &quot;Y&quot;)
+    # polygons &lt;- spdata@polygons
+    # for (i in 1:n) {
+    #     for (j in 1:n) {
+    #         if (border.locations[i, j] == 0 &amp; i &gt; j) {
+    #             points1 &lt;- polygons[[i]]@Polygons[[1]]@coords
+    #             points2 &lt;- polygons[[j]]@Polygons[[1]]@coords
+    #             which.points &lt;- which(!is.na(match(points1[, 
+    #               1], points2[, 1])) &amp; !is.na(match(points1[, 
+    #               2], points2[, 2])))
+    #             common.points &lt;- points1[which.points, ]
+    #             boundary.all &lt;- rbind(boundary.all, common.points)
+    #         }
+    #         else {
+    #         }
+    #     }
+    # }
+    # boundary.all &lt;- boundary.all[-1, ]
+    # boundary.all2 &lt;- boundary.all[!duplicated(boundary.all), 
+    #     ]
+    # rownames(boundary.all2) &lt;- 1:nrow(boundary.all2)
+    # boundary.final &lt;- SpatialPoints(boundary.all2)
+    # return(boundary.final)
+}</code></pre>
+<pre class="r"><code>test &lt;- boundary.highlight(border.locations=border.locations, spdata=pbe_sp)</code></pre>
 </div>
 
          <div id="disqus_thread"></div>
